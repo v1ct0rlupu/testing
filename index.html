@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Price Tracker</title>
+    <style>
+        #price {
+            font-size: 24px;
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Token Price Tracker</h1>
+    <p>Token Price: <span id="price">Loading...</span></p>
+    <script>
+        const tokenId = "ROAR-e5185d"; // Replace with your token ID
+        const url = `https://api.multiversx.com/tokens/${tokenId}`;
+        
+        function fetchTokenPrice() {
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch the token data: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const price = data.price ? `$${data.price}` : "Price not available";
+                    document.getElementById("price").innerText = price;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("price").innerText = "Error loading price.";
+                });
+        }
+        
+        // Fetch the price every 30 seconds
+        setInterval(fetchTokenPrice, 30000);
+        fetchTokenPrice(); // Initial fetch on page load
+    </script>
+</body>
+</html>
